@@ -47,12 +47,12 @@ function displayFilter() {
 	allOption.setAttribute("data-category-id", "0");
 	allOption.classList.add("active");
 	categoriesList.appendChild(allOption);
-	allCat.forEach((category) => {
+	for (const category of allCat) {
 		const li = document.createElement("li");
 		li.setAttribute("data-category-id", category.id);
 		li.textContent = category.name === "Hotels & restaurants" ? "Hôtels & restaurants" : category.name;
 		categoriesList.appendChild(li);
-	});
+	}
 	setFilterListener();
 }
 
