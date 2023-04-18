@@ -22,6 +22,7 @@ async function init() {
 	}
 	displayWorks();
 	displayFilter();
+	toggleNavActiveClass();
 }
 init();
 
@@ -76,16 +77,61 @@ function setFilterListener() {
 		});
 	}
 }
-
+//**************** LOG IN *******************************************************/
 const token = localStorage.getItem("token");
-
+console.log(token);
 if (token) {
 	createBanner();
+
+	const login = document.querySelector("#login");
+
 	const introH2 = document.querySelector("#introduction article");
 	const porteFolioH2 = document.querySelector("#portfolio h2");
 	const imgProfil = document.querySelector("#introduction figure");
+
+	login.textContent = "logout";
 
 	addEditLinkTo(introH2, "prepend");
 	addEditLinkTo(imgProfil, "appendChild");
 	addEditLinkTo(porteFolioH2, "appendChild");
 }
+
+//Fonction pour indiquer en gras sur quelle page on se trouve
+const toggleNavActiveClass = () => {
+	const currentPage = window.location.pathname;
+	const indexLink = document.getElementById("index");
+	const loginLink = document.getElementById("login");
+
+	indexLink.classList.remove("active");
+	loginLink.classList.remove("active");
+
+	if (currentPage.includes("index")) {
+		indexLink.classList.add("active");
+	} else if (currentPage.includes("login")) {
+		loginLink.classList.add("active");
+	}
+};
+
+// ****************** MODAL *****************/
+const openModal = function (e) {
+	e.preventDefault();
+
+	const targetId = e.currentTarget.dataset.target;
+	const modal = document.createElement("aside");
+	const modalWrapper = document.createElement("div");
+	modal.setAttribute("id", targetId);
+	modal.classList.add("modal");
+	modalWrapper.classList.add("modal-wrapper");
+
+	modal.appendChild(modalWrapper);
+	document.body.prepend(modal);
+
+	const target = document.getElementById(targetId);
+
+	target.style.display = null;
+	target.removeAttribute("aria-hidden");
+	target.setAttribute("aria-modal", "true");
+};
+document.querySelectorAll(".link-modal").forEach((a) => {
+	a.addEventListener("click", openModal);
+});

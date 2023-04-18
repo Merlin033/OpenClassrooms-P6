@@ -10,6 +10,9 @@ export const addEditLinkTo = (parentElement, where) => {
 	textLink.innerText = "modifier";
 	editLink.appendChild(textLink);
 	editLink.classList.add("link-modal");
+	editLink.setAttribute("href", "#");
+	editLink.setAttribute("data-target", "modal1");
+
 	addIconTo("fa-regular", "fa-pen-to-square", editLink);
 	if (parentElement.tagName === "H2") {
 		editLink.classList.add("h2-edit-link");
