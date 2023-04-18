@@ -20,12 +20,20 @@ loginForm.addEventListener("submit", async (e) => {
 			body: JSON.stringify(user),
 		});
 
+		if (!response.ok) {
+			throw new Error(response.status);
+		}
+
 		const data = await response.json();
 		console.log("Data received:", data);
 		const { userId, token } = data; // destructuration de l'objet, revient à dire : const userId = data.userId; const token = data.token;
 		localStorage.setItem("token", token);
 		window.location.href = "index.html";
 	} catch (error) {
-		console.error(error);
+		if (error.message === "404") {
+			alert("Adresse email ou mot de passe incorrect.");
+		} else {
+			console.error(error);
+		}
 	}
 });

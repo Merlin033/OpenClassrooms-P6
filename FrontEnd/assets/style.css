@@ -185,6 +185,7 @@ li:hover {
 #introduction {
 	display: flex;
 	align-items: center;
+	flex-direction: row;
 }
 #introduction figure {
 	flex: 1;
@@ -208,6 +209,7 @@ li:hover {
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+	display: flex;
 }
 .gallery {
 	width: 100%;
@@ -293,6 +295,69 @@ footer nav ul {
 .categories .active {
 	background-color: #1d6154;
 	color: #ffffff;
+}
+
+/* ****************************** EDIT MOD ****************************** */
+
+.edit-banner {
+	background-color: black;
+	color: #ffffff;
+	margin: auto -50%;
+	height: 3.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	column-gap: 20px;
+}
+.edit-banner i {
+	color: #ffffff;
+}
+.fa-pen-to-square {
+	font-size: 1rem;
+}
+.edit-banner button {
+	font-family: "Syne";
+	font-weight: 700;
+	color: #000000;
+	background-color: #ffffff;
+	border-radius: 1rem;
+	padding: 0.5rem 1.2rem;
+	cursor: pointer;
+	border: 0;
+	transition: 0.3s;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+.link-modal {
+	font-family: "Syne";
+	color: black;
+	text-decoration: none;
+	font-size: 0.8rem;
+	display: flex;
+	align-items: center;
+	flex-direction: row-reverse;
+	column-gap: 0.8rem;
+	width: 20%;
+	cursor: pointer;
+}
+#introduction .link-modal > p {
+	margin-bottom: 0;
+}
+.h2-edit-link {
+	display: flex;
+	margin-left: 3rem;
+}
+.article-edit-link {
+	display: flex;
+	justify-content: start;
+	margin-bottom: 1.5rem;
+	margin-right: 1rem;
+}
+.figure-edit-link {
+	display: flex;
+	justify-content: start;
+	margin-left: 10%;
+	margin-top: 1rem;
 }
 
 /* ****************************** Login Page ****************************** */

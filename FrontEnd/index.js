@@ -1,3 +1,6 @@
+import { createBanner } from "./components/banner.js";
+import { addEditLinkTo } from "./components/modal.js";
+
 const gallery = document.querySelector(".gallery");
 const categoriesList = document.querySelector(".categories");
 const allWorks = new Set();
@@ -72,4 +75,17 @@ function setFilterListener() {
 			}
 		});
 	}
+}
+
+const token = localStorage.getItem("token");
+
+if (token) {
+	createBanner();
+	const introH2 = document.querySelector("#introduction article");
+	const porteFolioH2 = document.querySelector("#portfolio h2");
+	const imgProfil = document.querySelector("#introduction figure");
+
+	addEditLinkTo(introH2, "prepend");
+	addEditLinkTo(imgProfil, "appendChild");
+	addEditLinkTo(porteFolioH2, "appendChild");
 }

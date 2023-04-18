@@ -29,7 +29,7 @@
 					<label for="email">E-mail</label>
 					<input type="email" name="email" />
 					<label for="password">Mot de passe</label>
-					<input type="password" name="password" />
+					<input type="password" name="password" pattern="^(?=.*[A-Z])(?=.*\d).{4,}$" required title="Le mot de passe doit contenir au moins une majuscule, un chiffre et avoir plus de 4 caractères." />
 					<button type="submit">Se connecter</button>
 				</form>
 				<a href="#">Mot de passe oublié</a>
