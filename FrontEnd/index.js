@@ -46,7 +46,10 @@ async function init() {
 
 		// On ouvre la modale en appelant la fonction openModal
 		document.querySelectorAll(".modal-link").forEach((a) => {
-			a.addEventListener("click", openModal);
+			a.addEventListener("click", (e) => {
+				e.preventDefault();
+				openModal();
+			});
 		});
 	} else {
 		displayFilter();
@@ -113,16 +116,13 @@ console.log(token);
 
 // ****************** MODAL *****************/
 
-const openModal = (e) => {
-	e.preventDefault();
-
+async function openModal() {
 	const target = document.createElement("aside");
 	const modalWrapper = document.createElement("div");
 	const modalTitle = document.createElement("h2");
 	const modalGrid = document.createElement("div");
 	const modalButton = document.createElement("button");
 	const modalDelete = document.createElement("a");
-
 	addIconTo("fa-solid", "fa-xmark", modalWrapper);
 
 	target.classList.add("modal");
@@ -139,6 +139,9 @@ const openModal = (e) => {
 	modalWrapper.appendChild(modalButton);
 	modalWrapper.appendChild(modalDelete);
 
+	const xMark = document.querySelector(".fa-xmark");
+	xMark.addEventListener("click", closeModal);
+
 	modalTitle.innerText = "Galerie Photo";
 	modalButton.textContent = "Ajouter une photo";
 	modalDelete.innerText = "Supprimer la galerie";
@@ -149,11 +152,17 @@ const openModal = (e) => {
 	modal.addEventListener("click", closeModal);
 	modalWrapper.addEventListener("click", stopPropagation);
 
-	displayWorks(modalGrid);
+	const allWorks = await getAllDatabaseInfo("works");
+	displayWorks(modalGrid, allWorks);
+
 	const figures = document.querySelectorAll(".modal__grid > figure");
+
+	for (const fig of figures) {
+		fig.classList.add("fig");
+	}
 	// Changer le texte des figcaptions pour "éditer"
 	function changeFigcaption() {
-		const figcaption = document.querySelectorAll("figcaption");
+		const figcaption = document.querySelectorAll(".fig > figcaption");
 		for (const fig of figcaption) {
 			fig.textContent = "éditer";
 			fig.classList.add("modal__grid__figure--edit");
@@ -168,7 +177,7 @@ const openModal = (e) => {
 	addIconToFig(figures);
 	// Cocher / Decocher les corbeilles
 	const iconTrashes = document.querySelectorAll(".fa-trash-can");
-	console.log(iconTrashes);
+
 	for (const trash of iconTrashes) {
 		trash.addEventListener("click", () => {
 			trash.classList.toggle("trash--active");
@@ -181,20 +190,23 @@ const openModal = (e) => {
 
 	deleteLink.addEventListener("click", (event) => {
 		event.preventDefault();
+		const selectedWorks = getSelectedWorks();
 
-		const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer les travaux sélectionnés ?");
+		if (selectedWorks.length === 0) {
+			alert("Veuillez sélectionner au moins un projet");
+		} else {
+			const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer les travaux sélectionnés ?");
 
-		if (confirmDelete) {
-			const selectedWorks = getSelectedWorks();
-
-			deleteWorks(selectedWorks);
+			if (confirmDelete) {
+				deleteWorks(selectedWorks);
+			}
 		}
 	});
 
 	function getSelectedWorks() {
 		const selectedWorks = [];
 
-		const works = document.querySelectorAll("figure");
+		const works = document.querySelectorAll(".modal__grid > figure");
 
 		for (const work of works) {
 			const checkbox = work.querySelector("i");
@@ -209,24 +221,27 @@ const openModal = (e) => {
 		for (const workId of workIds) {
 			const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
 				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
 			});
 
 			if (response.ok) {
-				const deletedWork = await response.json();
-				console.log(`Work with ID ${deletedWork.id} has been deleted`);
+				console.log(`Work with ID ${workId} has been deleted`);
 			} else {
 				console.error(`Failed to delete work with ID ${workId}`);
 			}
 		}
-
 		closeModal();
-		displayWorks(gallery);
+		const allWorks = await getAllDatabaseInfo("works");
+		displayWorks(gallery, allWorks);
 	}
-};
+}
 
 const closeModal = (e) => {
 	if (modal === null) return;
-	e.preventDefault();
+
 	clearModalContent();
 	modal.remove();
 };

@@ -442,11 +442,21 @@ footer nav ul {
 .modal__delete {
 	color: #d65353;
 }
+.modal__delete:hover {
+	cursor: pointer;
+	color: #d52828;
+	transform: scale(1.1);
+}
 .fa-xmark {
 	position: absolute;
 	top: 2rem;
 	right: 2rem;
 	font-size: 1.3rem;
+	transition: all 0.3s ease;
+}
+.fa-xmark:hover {
+	transform: scale(1.2) rotate(360deg);
+	cursor: pointer;
 }
 .fa-trash-can {
 	position: absolute;
