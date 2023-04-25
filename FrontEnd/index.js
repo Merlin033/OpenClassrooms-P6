@@ -1,10 +1,15 @@
 import { createBanner } from "./components/banner.js";
-import { addEditLinkTo } from "./components/modal.js";
+import { addIconTo } from "./components/icones.js";
+import { addEditLinkTo } from "./components/modalLink.js";
+import { toggleNavActiveClass } from "./functions/toggleNav.js";
 
 const gallery = document.querySelector(".gallery");
 const categoriesList = document.querySelector(".categories");
 const allWorks = new Set();
 const allCat = new Set();
+const token = localStorage.getItem("token");
+
+let modal = null;
 
 async function getAllDatabaseInfo(type) {
 	const response = await fetch("http://localhost:5678/api/" + type);
@@ -20,13 +25,36 @@ async function init() {
 	for (const category of categories) {
 		allCat.add(category);
 	}
-	displayWorks();
-	displayFilter();
+	displayWorks(gallery);
 	toggleNavActiveClass();
+
+	if (token) {
+		createBanner();
+
+		const login = document.querySelector("#login");
+
+		const introH2 = document.querySelector("#introduction article");
+		const porteFolioH2 = document.querySelector("#portfolio h2");
+		const imgProfil = document.querySelector("#introduction figure");
+
+		login.firstElementChild.textContent = "logout";
+		login.addEventListener("click", () => localStorage.clear());
+
+		addEditLinkTo(introH2, "prepend");
+		addEditLinkTo(imgProfil, "appendChild");
+		addEditLinkTo(porteFolioH2, "appendChild");
+
+		// On ouvre la modale en appelant la fonction openModal
+		document.querySelectorAll(".modal-link").forEach((a) => {
+			a.addEventListener("click", openModal);
+		});
+	} else {
+		displayFilter();
+	}
 }
 init();
 
-function displayWorks(works = allWorks) {
+function displayWorks(container, works = allWorks) {
 	const fragment = document.createDocumentFragment();
 	for (const work of works) {
 		const figure = document.createElement("figure");
@@ -41,8 +69,8 @@ function displayWorks(works = allWorks) {
 		figure.appendChild(figcaption);
 		fragment.appendChild(figure);
 	}
-	gallery.innerHTML = "";
-	gallery.appendChild(fragment);
+	container.innerHTML = "";
+	container.appendChild(fragment);
 }
 
 function displayFilter() {
@@ -69,69 +97,79 @@ function setFilterListener() {
 			clickedItem.classList.add("active");
 			const categoryId = parseInt(clickedItem.getAttribute("data-category-id"));
 			if (categoryId == 0) {
-				displayWorks();
+				displayWorks(gallery);
 			} else {
 				const filtredWorks = [...allWorks].filter((work) => work.categoryId == categoryId);
-				displayWorks(filtredWorks);
+				displayWorks(gallery, filtredWorks);
 			}
 		});
 	}
 }
 //**************** LOG IN *******************************************************/
-const token = localStorage.getItem("token");
+
 console.log(token);
-if (token) {
-	createBanner();
-
-	const login = document.querySelector("#login");
-
-	const introH2 = document.querySelector("#introduction article");
-	const porteFolioH2 = document.querySelector("#portfolio h2");
-	const imgProfil = document.querySelector("#introduction figure");
-
-	login.textContent = "logout";
-
-	addEditLinkTo(introH2, "prepend");
-	addEditLinkTo(imgProfil, "appendChild");
-	addEditLinkTo(porteFolioH2, "appendChild");
-}
-
-//Fonction pour indiquer en gras sur quelle page on se trouve
-const toggleNavActiveClass = () => {
-	const currentPage = window.location.pathname;
-	const indexLink = document.getElementById("index");
-	const loginLink = document.getElementById("login");
-
-	indexLink.classList.remove("active");
-	loginLink.classList.remove("active");
-
-	if (currentPage.includes("index")) {
-		indexLink.classList.add("active");
-	} else if (currentPage.includes("login")) {
-		loginLink.classList.add("active");
-	}
-};
 
 // ****************** MODAL *****************/
-const openModal = function (e) {
+
+const openModal = (e) => {
 	e.preventDefault();
 
-	const targetId = e.currentTarget.dataset.target;
-	const modal = document.createElement("aside");
+	const target = document.createElement("aside");
 	const modalWrapper = document.createElement("div");
-	modal.setAttribute("id", targetId);
-	modal.classList.add("modal");
+	const modalTitle = document.createElement("h2");
+	const modalGrid = document.createElement("div");
+	const modalButton = document.createElement("button");
+	const modalDelete = document.createElement("a");
+
+	addIconTo("fa-solid", "fa-xmark", modalWrapper);
+
+	target.classList.add("modal");
 	modalWrapper.classList.add("modal-wrapper");
+	modalTitle.classList.add("modal__title");
+	modalGrid.classList.add("modal__grid");
+	modalButton.classList.add("modal__btn");
+	modalDelete.classList.add("modal__delete");
 
-	modal.appendChild(modalWrapper);
-	document.body.prepend(modal);
+	target.appendChild(modalWrapper);
+	document.body.prepend(target);
+	modalWrapper.appendChild(modalTitle);
+	modalWrapper.appendChild(modalGrid);
+	modalWrapper.appendChild(modalButton);
+	modalWrapper.appendChild(modalDelete);
 
-	const target = document.getElementById(targetId);
+	modalTitle.innerText = "Galerie Photo";
+	modalButton.textContent = "Ajouter une photo";
+	modalDelete.innerText = "Supprimer la galerie";
 
-	target.style.display = null;
 	target.removeAttribute("aria-hidden");
 	target.setAttribute("aria-modal", "true");
+	modal = target;
+	modal.addEventListener("click", closeModal);
+	modalWrapper.addEventListener("click", stopPropagation);
+
+	displayWorks(modalGrid);
+	const figures = document.querySelectorAll("figure");
+
+	function changeFigcaption() {
+		const figcaption = document.querySelectorAll("figcaption");
+		for (const fig of figcaption) {
+			fig.textContent = "éditer";
+			fig.classList.add("modal__grid__figure--edit");
+		}
+	}
+	changeFigcaption();
+	function addIconToFig(figures) {
+		for (const fig of figures) {
+			addIconTo("fa-regular", "fa-trash-can", fig);
+		}
+	}
+	addIconToFig(figures);
 };
-document.querySelectorAll(".link-modal").forEach((a) => {
-	a.addEventListener("click", openModal);
-});
+
+const closeModal = (e) => {
+	if (modal === null) return;
+	e.preventDefault();
+	modal.remove();
+};
+
+const stopPropagation = (e) => e.stopPropagation();

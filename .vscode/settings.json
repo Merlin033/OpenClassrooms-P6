@@ -1,0 +1,42 @@
+{
+    "window.zoomLevel": 1,
+    "editor.minimap.enabled": false,
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false,
+    "editor.renderWhitespace": "trailing",
+    "editor.linkedEditing": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "explorer.autoReveal": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "workbench.tree.indent": 15,
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.editor.enablePreview": false,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "workbench.colorTheme": "Tokyo Night",
+    "editor.fontFamily": "'JetBrains Mono', Consolas, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.lineHeight": 28,
+    "editor.fontSize": 16,
+    "workbench.colorCustomizations": {"[Tokyo Night]": {
+        "editor.selectionBackground": "#3D59A1",
+        "editor.selectionHighlightBackground": "#3D59A1"
+        }  
+    },
+    "gitlens.currentLine.enabled": false,
+    "gitlens.codeLens.enabled": false,
+    "gitlens.hovers.annotations.over": "line",
+    "multiCommand.commands": [
+        {
+            "command": "multiCommand.makeRoom",
+            "sequence": [
+                "workbench.action.toggleSidebarVisibility",
+                "workbench.action.toggleActivityBarVisibility",
+            ]
+        }
+    ],
+    "javascript.preferences.importModuleSpecifierEnding": "js",
+    "typescript.preferences.importModuleSpecifierEnding": "js",
+}

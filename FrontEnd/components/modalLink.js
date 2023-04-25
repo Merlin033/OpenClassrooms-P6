@@ -9,7 +9,7 @@ export const addEditLinkTo = (parentElement, where) => {
 	const textLink = document.createElement("p");
 	textLink.innerText = "modifier";
 	editLink.appendChild(textLink);
-	editLink.classList.add("link-modal");
+	editLink.classList.add("modal-link");
 	editLink.setAttribute("href", "#");
 	editLink.setAttribute("data-target", "modal1");
 
