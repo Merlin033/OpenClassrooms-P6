@@ -61,6 +61,8 @@ function displayWorks(container, works = allWorks) {
 		const img = document.createElement("img");
 		const figcaption = document.createElement("figcaption");
 
+		figure.setAttribute("data-id", work.id);
+
 		img.src = work.imageUrl;
 		img.alt = work.title;
 		figcaption.textContent = work.title;
@@ -124,7 +126,7 @@ const openModal = (e) => {
 	addIconTo("fa-solid", "fa-xmark", modalWrapper);
 
 	target.classList.add("modal");
-	modalWrapper.classList.add("modal-wrapper");
+	modalWrapper.classList.add("modal-wrapper", "modal-content");
 	modalTitle.classList.add("modal__title");
 	modalGrid.classList.add("modal__grid");
 	modalButton.classList.add("modal__btn");
@@ -148,8 +150,8 @@ const openModal = (e) => {
 	modalWrapper.addEventListener("click", stopPropagation);
 
 	displayWorks(modalGrid);
-	const figures = document.querySelectorAll("figure");
-
+	const figures = document.querySelectorAll(".modal__grid > figure");
+	// Changer le texte des figcaptions pour "éditer"
 	function changeFigcaption() {
 		const figcaption = document.querySelectorAll("figcaption");
 		for (const fig of figcaption) {
@@ -164,12 +166,73 @@ const openModal = (e) => {
 		}
 	}
 	addIconToFig(figures);
+	// Cocher / Decocher les corbeilles
+	const iconTrashes = document.querySelectorAll(".fa-trash-can");
+	console.log(iconTrashes);
+	for (const trash of iconTrashes) {
+		trash.addEventListener("click", () => {
+			trash.classList.toggle("trash--active");
+		});
+	}
+
+	//Supression des travaux
+
+	const deleteLink = document.querySelector(".modal__delete");
+
+	deleteLink.addEventListener("click", (event) => {
+		event.preventDefault();
+
+		const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer les travaux sélectionnés ?");
+
+		if (confirmDelete) {
+			const selectedWorks = getSelectedWorks();
+
+			deleteWorks(selectedWorks);
+		}
+	});
+
+	function getSelectedWorks() {
+		const selectedWorks = [];
+
+		const works = document.querySelectorAll("figure");
+
+		for (const work of works) {
+			const checkbox = work.querySelector("i");
+			if (checkbox.classList.contains("trash--active")) {
+				selectedWorks.push(work.dataset.id);
+			}
+		}
+		return selectedWorks;
+	}
+
+	async function deleteWorks(workIds) {
+		for (const workId of workIds) {
+			const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
+				method: "DELETE",
+			});
+
+			if (response.ok) {
+				const deletedWork = await response.json();
+				console.log(`Work with ID ${deletedWork.id} has been deleted`);
+			} else {
+				console.error(`Failed to delete work with ID ${workId}`);
+			}
+		}
+
+		closeModal();
+		displayWorks(gallery);
+	}
 };
 
 const closeModal = (e) => {
 	if (modal === null) return;
 	e.preventDefault();
+	clearModalContent();
 	modal.remove();
 };
 
+function clearModalContent() {
+	const modalContent = document.querySelector(".modal-content");
+	modalContent.innerHTML = "";
+}
 const stopPropagation = (e) => e.stopPropagation();
