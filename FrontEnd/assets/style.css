@@ -389,6 +389,7 @@ footer nav ul {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+	border-radius: 0.3rem;
 }
 .modal__title {
 	color: #000000;
@@ -454,6 +455,7 @@ footer nav ul {
 	font-size: 1.3rem;
 	transition: all 0.3s ease;
 }
+
 .fa-xmark:hover {
 	transform: scale(1.2) rotate(360deg);
 	cursor: pointer;
@@ -477,6 +479,105 @@ footer nav ul {
 .trash--active {
 	background-color: darkred;
 	transform: scale(1.2);
+}
+
+/* ****************************** MODAL 2 ****************************** */
+
+.fa-arrow-left {
+	position: absolute;
+	top: 2rem;
+	left: 2rem;
+	font-size: 1.3rem;
+}
+.fa-arrow-left:hover {
+	transform: scale(1.2);
+	cursor: pointer;
+}
+.modal__box {
+	background: #e8f1f7;
+	border-radius: 3px;
+	width: 70%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.modal__box p {
+	padding-bottom: 1rem;
+}
+.fa-image {
+	font-size: 3.5rem;
+	padding-top: 1rem;
+}
+.file-input-wrapper {
+	position: relative;
+	overflow: hidden;
+	width: 40%;
+	display: flex;
+	align-items: center;
+	height: 36px;
+	margin-top: 1.2rem;
+	margin-bottom: 0.5rem;
+}
+
+.file-input-wrapper input[type="file"] {
+	position: absolute;
+	font-size: 100px;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	display: none;
+	cursor: pointer;
+}
+
+.file-input-wrapper label {
+	font-family: "Syne";
+	font-weight: 700;
+	background-color: #cbd6dc;
+	border-radius: 1.2rem;
+	padding: 0.5rem 1.2rem;
+	cursor: pointer;
+	border: 0;
+	transition: 0.3s;
+	width: 78%;
+	text-align: center;
+}
+
+.file-input-wrapper label:hover {
+	background-color: #e1e7ea;
+}
+
+.file-input-wrapper label:active {
+	background-color: #003d66;
+}
+.modal__btn--inactive {
+	background: #a7a7a7;
+	cursor: inherit;
+}
+.modal__form {
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	width: 70%;
+}
+.modal__bar {
+	border-top: 1px solid #b3b3b3;
+	width: 70%;
+	margin-top: 2.5rem;
+}
+.modal__input {
+	margin-top: 0.5rem;
+	width: 98%;
+	height: 51px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: 0px solid white;
+}
+.modal__label {
+	margin-top: 1.5rem;
+}
+.loaded-img {
+	object-fit: cover;
+	width: 33%;
 }
 
 /* ****************************** Login Page ****************************** */
