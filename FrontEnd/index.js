@@ -5,11 +5,11 @@ import { toggleNavActiveClass } from "./functions/toggleNav.js";
 import { openModal } from "./components/modal1.js";
 import { openModal2 } from "./components/modal2.js";
 
-const gallery = document.querySelector(".gallery");
+export const gallery = document.querySelector(".gallery");
 const categoriesList = document.querySelector(".categories");
 const allWorks = new Set();
 const allCat = new Set();
-const token = localStorage.getItem("token");
+export const token = localStorage.getItem("token");
 
 let modal = null;
 

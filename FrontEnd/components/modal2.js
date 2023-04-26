@@ -1,6 +1,10 @@
 import { clearModalContent } from "./modal1.js";
 import { stopPropagation } from "./modal1.js";
 import { addIconTo } from "./icones.js";
+import { displayWorks } from "../index.js";
+import { token } from "../index.js";
+import { getAllDatabaseInfo } from "../index.js";
+import { gallery } from "../index.js";
 
 let modal = null;
 
@@ -74,9 +78,12 @@ export async function openModal2() {
 	modalOption2.textContent = "Appartements";
 	modalOption3.textContent = "Hôtels & restaurants";
 
+	modalForm.setAttribute("id", "myform");
 	modalButtonAdd.setAttribute("id", "file-input");
 	modalButtonAdd.setAttribute("name", "file-input");
 	modalButtonAdd.setAttribute("type", "file");
+	modalButton.setAttribute("type", "submit");
+	modalButton.setAttribute("form", "myform");
 	modalLabelAdd.setAttribute("for", "file-input");
 	modalOption1.setAttribute("value", "1");
 	modalOption2.setAttribute("value", "2");
@@ -115,10 +122,10 @@ export async function openModal2() {
 			modalButton.classList.add("modal__btn--inactive");
 		}
 	}
-	// ajoutez un gestionnaire d'événements pour le bouton "Valider"
+
 	modalForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
-		const img = modalButton.files[0];
+		const img = modalButtonAdd.files[0];
 		const title = modalInputTitle.value;
 		const category = modalInputCat.value;
 
@@ -135,13 +142,18 @@ export async function openModal2() {
 
 		try {
 			// Envoyer la requête POST avec Fetch
-			const response = await fetch("/url-de-votre-api", {
+			const response = await fetch("http://localhost:5678/api/works", {
 				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
 				body: formData,
 			});
 
 			// Vérifier si la requête a réussi
-			if (!response.ok) {
+			if (response.ok) {
+				console.log("Le nouveau projet a bien été ajouté !");
+			} else {
 				throw new Error("Erreur de serveur");
 			}
 
@@ -149,7 +161,8 @@ export async function openModal2() {
 			closeModal2();
 
 			// Mettre à jour la galerie avec le nouveau travail ajouté
-			await displayWorks(allWorks);
+			const allWorks2 = await getAllDatabaseInfo("works");
+			displayWorks(gallery, allWorks2);
 		} catch (error) {
 			console.error(error);
 		}

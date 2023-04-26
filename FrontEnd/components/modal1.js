@@ -3,6 +3,8 @@ import { addIconTo } from "./icones.js";
 import { getAllDatabaseInfo } from "../index.js";
 import { init } from "../index.js";
 import { displayWorks } from "../index.js";
+import { token } from "../index.js";
+import { gallery } from "../index.js";
 let modal = null;
 
 export async function openModal() {
