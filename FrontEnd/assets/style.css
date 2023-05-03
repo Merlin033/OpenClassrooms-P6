@@ -226,6 +226,8 @@ li:hover {
 
 .gallery img {
 	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 #contact {
 	width: 50%;
@@ -440,6 +442,10 @@ footer nav ul {
 	width: 35%;
 	align-self: center;
 }
+.modal1__btn:hover {
+	background-color: #50af9d;
+	transform: scale(1.1);
+}
 .modal__delete {
 	color: #d65353;
 }
@@ -625,6 +631,10 @@ section a {
 	margin-bottom: 1.5rem;
 	width: 60%;
 	align-self: center;
+}
+#login button:hover {
+	background-color: #50af9d;
+	transform: scale(1.1);
 }
 #f-login {
 	position: fixed;

@@ -1,4 +1,4 @@
-import { clearModalContent } from "./modal1.js";
+import { clearModalContent, openModal } from "./modal1.js";
 import { stopPropagation } from "./modal1.js";
 import { addIconTo } from "./icones.js";
 import { displayWorks } from "../index.js";
@@ -66,7 +66,12 @@ export async function openModal2() {
 	modalWrapper.appendChild(modalButton);
 
 	const xMark = document.querySelector(".fa-xmark");
+	const arrowLeft = document.querySelector(".fa-arrow-left");
 	xMark.addEventListener("click", closeModal2);
+	arrowLeft.addEventListener("click", () => {
+		closeModal2();
+		openModal();
+	});
 
 	modalTitle.innerText = "Ajout photo";
 	modalPara.innerText = "jpg. png: 4mo max";
@@ -103,8 +108,20 @@ export async function openModal2() {
 	// ajoutez un gestionnaire d'événements pour le champ de saisie de fichier
 	modalButtonAdd.addEventListener("change", (e) => {
 		const file = e.target.files[0];
+		// Vérifier si le fichier est une image jpeg ou png
+		if (!["image/jpeg", "image/png"].includes(file.type)) {
+			alert("Le format du fichier doit être JPG ou PNG");
+			e.target.value = "";
+			return;
+		}
+
+		// Vérifier si la taille du fichier ne dépasse pas 5 Mo
+		if (file.size > 4 * 1024 * 1024) {
+			alert("La taille de l'image ne doit pas dépasser 4 Mo");
+			e.target.value = "";
+			return;
+		}
 		modalBox.innerHTML = "";
-		// faites quelque chose avec le fichier sélectionné, par exemple l'afficher dans la modale
 		const img = document.createElement("img");
 		img.classList.add("loaded-img");
 		img.src = URL.createObjectURL(file);
@@ -157,7 +174,6 @@ export async function openModal2() {
 				throw new Error("Erreur de serveur");
 			}
 
-			// Fermer la modale après l'ajout du nouveau travail
 			closeModal2();
 
 			// Mettre à jour la galerie avec le nouveau travail ajouté

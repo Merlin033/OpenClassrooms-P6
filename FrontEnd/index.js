@@ -18,7 +18,7 @@ export async function getAllDatabaseInfo(type) {
 	return response.ok ? response.json() : console.log(response);
 }
 
-export async function init() {
+async function init() {
 	const works = await getAllDatabaseInfo("works");
 	for (const work of works) {
 		allWorks.add(work);
@@ -50,7 +50,7 @@ export async function init() {
 		document.querySelectorAll(".modal-link").forEach((a) => {
 			a.addEventListener("click", (e) => {
 				e.preventDefault();
-				openModal();
+				if (a.classList.contains("h2-edit-link")) openModal();
 			});
 		});
 	} else {

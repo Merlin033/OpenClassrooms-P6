@@ -1,7 +1,6 @@
 import { openModal2 } from "./modal2.js";
 import { addIconTo } from "./icones.js";
 import { getAllDatabaseInfo } from "../index.js";
-import { init } from "../index.js";
 import { displayWorks } from "../index.js";
 import { token } from "../index.js";
 import { gallery } from "../index.js";
@@ -21,6 +20,7 @@ export async function openModal() {
 	modalTitle.classList.add("modal__title");
 	modalGrid.classList.add("modal__grid");
 	modalButton.classList.add("modal__btn");
+	modalButton.classList.add("modal1__btn");
 	modalDelete.classList.add("modal__delete");
 
 	target.appendChild(modalWrapper);
@@ -70,8 +70,14 @@ export async function openModal() {
 	const iconTrashes = document.querySelectorAll(".fa-trash-can");
 
 	for (const trash of iconTrashes) {
-		trash.addEventListener("click", () => {
-			trash.classList.toggle("trash--active");
+		trash.addEventListener("click", (e) => {
+			const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer ce travail ?");
+			const selectedWork = [];
+			if (confirmDelete) {
+				selectedWork.push(e.target.parentElement.dataset.id);
+				deleteWorks(selectedWork);
+				selectedWork.splice(0, selectedWork.length);
+			}
 		});
 	}
 
@@ -82,15 +88,9 @@ export async function openModal() {
 	deleteLink.addEventListener("click", (event) => {
 		event.preventDefault();
 		const selectedWorks = getSelectedWorks();
-
-		if (selectedWorks.length === 0) {
-			alert("Veuillez sélectionner au moins un projet");
-		} else {
-			const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer les travaux sélectionnés ?");
-
-			if (confirmDelete) {
-				deleteWorks(selectedWorks);
-			}
+		const confirmDelete = confirm("Êtes-vous sûr de vouloir supprimer tous les travaux de la galerie ?");
+		if (confirmDelete) {
+			deleteWorks(selectedWorks);
 		}
 	});
 
@@ -100,10 +100,7 @@ export async function openModal() {
 		const works = document.querySelectorAll(".modal__grid > figure");
 
 		for (const work of works) {
-			const checkbox = work.querySelector("i");
-			if (checkbox.classList.contains("trash--active")) {
-				selectedWorks.push(work.dataset.id);
-			}
+			selectedWorks.push(work.dataset.id);
 		}
 		return selectedWorks;
 	}
