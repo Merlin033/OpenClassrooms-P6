@@ -32,7 +32,7 @@ loginForm.addEventListener("submit", async (e) => {
 		localStorage.setItem("token", token);
 		window.location.href = "index.html";
 	} catch (error) {
-		if (error.message === "404") {
+		if (error.message === "401" || error.message === "404") {
 			alert("Adresse email ou mot de passe incorrect.");
 		} else {
 			console.error(error);

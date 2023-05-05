@@ -162,6 +162,7 @@ export async function openModal2() {
 			const response = await fetch("http://localhost:5678/api/works", {
 				method: "POST",
 				headers: {
+					// "Content-Type" : "multipart/form-data",
 					Authorization: `Bearer ${token}`,
 				},
 				body: formData,

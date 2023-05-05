@@ -100,7 +100,10 @@ function setFilterListener() {
 	for (const item of categoryItems) {
 		item.addEventListener("click", (e) => {
 			const clickedItem = e.target;
-			document.querySelector(".active").classList.remove("active");
+			const activeItems = document.querySelectorAll(".categories li.active");
+			for (const activeItem of activeItems) {
+				activeItem.classList.remove("active");
+			}
 			clickedItem.classList.add("active");
 			const categoryId = parseInt(clickedItem.getAttribute("data-category-id"));
 			if (categoryId == 0) {
