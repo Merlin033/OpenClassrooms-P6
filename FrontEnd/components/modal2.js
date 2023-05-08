@@ -147,7 +147,8 @@ export async function openModal2() {
 		const category = modalInputCat.value;
 
 		// Vérifier si tous les champs sont remplis
-		if (modalButton.classList.contains("modal__btn--inactive")) {
+		if (modalButton.classList.contains("modal__btn--inactive") || !img || !title || !category) {
+			alert("Veuillez remplir tous les champs");
 			return;
 		}
 
